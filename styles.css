@@ -1,0 +1,85 @@
+.tile .piece {
+    cursor: pointer;
+}
+
+/* Change cursor to pointer when hovering over highlighted tiles */
+.tile.selected {
+    cursor: pointer;
+}
+
+/* Highlighted tiles */
+.tile.selected {
+    border: 0.5px solid rgb(0, 255, 191);
+    box-sizing: border-box;
+}
+
+/* Existing styles */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#game-board {
+    display: flex;
+    flex-wrap: wrap;
+    width: 480px; /* 8 tiles * 60px each */
+    margin: 20px auto;
+}
+
+.tile {
+    width: 60px;
+    height: 60px;
+    position: relative;
+}
+
+.tile.light {
+    background-color: #eee;
+}
+
+.tile.dark {
+    background-color: #ccc;
+}
+
+.piece {
+    font-size: 40px;
+    line-height: 60px;
+}
+
+.piece-red {
+    color: red;
+}
+
+.piece-black {
+    color: black;
+}
+.action-section {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-block {
+    width: 100%;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+}
+
+a.btn-link {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+a.btn-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}

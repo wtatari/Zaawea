@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZaaWea - How to Play</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            border-radius: 10px;
+        }
+
+        .card-header {
+            background-color: #32ccb8;
+            color: white;
+            font-weight: bold;
+            text-align: left;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            background-color: #343a40;
+            color: white;
+        }
+
+        p {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">How to Play ZaaWea</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <!-- Card 1: Movement -->
+                <div class="card">
+                    <div class="card-header">1. Movement</div>
+                    <div class="card-body">
+                        <p>Each shape can move as many spaces as it has angles minus one. <br>For example, a triangle with 3 angles can move up to 2 spaces, while a square with 4 angles can move up to 3 spaces.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Merging -->
+                <div class="card">
+                    <div class="card-header">2. Merging</div>
+                    <div class="card-body">
+                        <p>Two shapes of the same type and color can merge to form a new shape with one more angle. For example:
+                        <ul>
+                            <li>Two triangles merge to form a square (4 angles).</li>
+                            <li>Two squares merge to form a hexagon (6 angles).</li>
+                            <li>Two hexagons merge to form an octagon (8 angles).</li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Combat -->
+                <div class="card">
+                    <div class="card-header">3. Combat</div>
+                    <div class="card-body">
+                        <p>Shapes battle based on angles:
+                        <ul>
+                            <li>The shape with the smallest angle wins when their angles face each other.</li>
+                            <li>Angles always beat flat surfaces. If a shape's angle attacks another shape’s surface, the angle wins.</li>
+                            <li>If two shapes with equal angles face each other (e.g., two triangles), the shape that attacks first wins.</li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Game Objective -->
+                <div class="card">
+                    <div class="card-header">4. Winning Conditions</div>
+                    <div class="card-body">
+                        <p>
+                            <strong>Merging Two Octagons (Victory by Merge):</strong><br>
+                            A player wins the game by merging two octagons of the same color. Once two octagons merge, the player who successfully merges them is declared the winner.<br>
+                            <em>How it happens:</em> Octagons merge when one octagon moves onto another octagon of the same color. This action represents completing the maximum shape possible in the game.
+                        </p>
+                        
+                        <p>
+                            <strong>Losing All Octagons (Loss by Elimination):</strong><br>
+                            A player loses the game if they no longer have any octagons left on the board.<br>
+                            <em>How it happens:</em> Octagons can be eliminated through combat, meaning a player must carefully defend their octagons. If a player loses their last octagon, the other player automatically wins.
+                        </p>
+                                            </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <p>&copy; <span id="year"></span> ZaaWea | Designed by wtatari</p>
+        <script>
+            document.getElementById('year').textContent = new Date().getFullYear();
+        </script>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
