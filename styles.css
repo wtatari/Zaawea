@@ -83,3 +83,18 @@ a.btn-link:hover {
     color: #0056b3;
     text-decoration: underline;
 }
+/* Center logo at the top */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* Adjust the height to fit the smaller logo */
+    margin-bottom: 20px; /* Space between the logo and content */
+    margin-top: 20px
+}
+
+.logo {
+    max-width: 200px; /* Set the logo to a smaller size */
+    margin-top: 20px
+
+}

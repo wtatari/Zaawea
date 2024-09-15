@@ -1,5 +1,3 @@
-// game.js
-
 import { BOARD_SIZE } from './Constants.js';
 import { Triangle, Square, Hexagon, Octagon } from './Piece.js';
 import { getAIMove } from './AI.js'; // Import the AI module
@@ -12,6 +10,7 @@ let moveHistory = [];
 let gameStateHistory = [];
 let gameMode = 'human-vs-ai'; // Default to human vs AI mode
 let aiColor = 'black'; // AI plays as black
+let winByMergingOctagons = false; // Initialize as false
 
 // Helper function to get piece letter
 function getPieceLetter(piece) {
@@ -23,6 +22,12 @@ function getPieceLetter(piece) {
         default: return '';
     }
 }
+
+// Toggle for "Allow win by merging octagons"
+document.getElementById('toggle-merge-win').addEventListener('change', function(event) {
+    winByMergingOctagons = event.target.checked;
+    console.log("Allow win by merging: ", winByMergingOctagons);
+});
 
 // Helper function to convert row and col to algebraic notation (like 'a8', 'h1')
 function convertToAlgebraic(row, col) {
@@ -69,8 +74,8 @@ let board = initializeBoard();
 
 // Check if a player has won by merging two octagons
 function checkWinByMergingOctagons(piece) {
-    // Ensure it's only octagons
-    if (!(piece instanceof Octagon)) return;
+    // Ensure it's only octagons and the rule is enabled
+    if (!(piece instanceof Octagon) || !winByMergingOctagons) return;
 
     const octagonCount = board.flat().filter(tile => tile instanceof Octagon && tile.color === piece.color).length;
 
@@ -145,6 +150,7 @@ function handleTileClick(event) {
     const col = parseInt(event.currentTarget.dataset.col);
     selectPiece(row, col);
 }
+
 
 // Select and move pieces
 function selectPiece(row, col) {
