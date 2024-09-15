@@ -1,7 +1,10 @@
+// Game.js
+
 import { BOARD_SIZE } from './Constants.js';
 import { Triangle, Square, Hexagon, Octagon } from './Piece.js';
 import { getAIMove } from './AI.js'; // Import the AI module
 
+// Game State Variables
 let selectedPiece = null;
 let selectedPosition = null;
 let highlightedMoves = [];
@@ -12,7 +15,12 @@ let gameMode = 'human-vs-ai'; // Default to human vs AI mode
 let aiColor = 'black'; // AI plays as black
 let winByMergingOctagons = false; // Initialize as false
 
-// Helper function to get piece letter
+// Initialize the Board
+let board = initializeBoard();
+
+// Helper Functions
+
+// Function to get piece letter for move recording
 function getPieceLetter(piece) {
     switch (piece.shape) {
         case 'triangle': return 'T';
@@ -52,7 +60,7 @@ function saveCurrentGameState() {
     });
 }
 
-// Function to initialize the board
+// Function to initialize the board with pieces
 function initializeBoard() {
     return Array.from({ length: BOARD_SIZE }, (_, row) =>
         Array.from({ length: BOARD_SIZE }, (_, col) => {
@@ -69,10 +77,7 @@ function initializeBoard() {
     );
 }
 
-// Initialize the board with pieces
-let board = initializeBoard();
-
-// Check if a player has won by merging two octagons
+// Function to check if a player has won by merging two octagons
 function checkWinByMergingOctagons(piece) {
     // Ensure it's only octagons and the rule is enabled
     if (!(piece instanceof Octagon) || !winByMergingOctagons) return;
@@ -81,26 +86,31 @@ function checkWinByMergingOctagons(piece) {
 
     // The player wins only when there's exactly 1 octagon left after the merge
     if (octagonCount === 1) {  
-        alert(`${piece.color.toUpperCase()} player wins by merging two octagons!`);
-        resetGame();
+        displayWinMessage(`${piece.color.toUpperCase()} player`);
     }
 }
 
-// Check if a player has lost by losing all their octagons
+// Function to check if a player has lost by losing all their octagons
 function checkLoseCondition() {
     const redOctagons = board.flat().filter(tile => tile instanceof Octagon && tile.color === 'red').length;
     const blackOctagons = board.flat().filter(tile => tile instanceof Octagon && tile.color === 'black').length;
 
+    const checkStatusDiv = document.getElementById('check-status');
+
     if (redOctagons === 0) {
-        alert('BLACK player wins! RED has no octagons left.');
-        resetGame();
+        checkStatusDiv.textContent = 'BLACK player wins! RED has no octagons left.';
+        checkStatusDiv.classList.add('win');
+        checkStatusDiv.classList.remove('check', 'checkmate');
+        addEndGameOptions(); // Provide options to Undo or Restart
     } else if (blackOctagons === 0) {
-        alert('RED player wins! BLACK has no octagons left.');
-        resetGame();
+        checkStatusDiv.textContent = 'RED player wins! BLACK has no octagons left.';
+        checkStatusDiv.classList.add('win');
+        checkStatusDiv.classList.remove('check', 'checkmate');
+        addEndGameOptions(); // Provide options to Undo or Restart
     }
 }
 
-// Render the board
+// Function to render the board
 function renderBoard() {
     const gameBoard = document.getElementById('game-board');
     gameBoard.innerHTML = '';
@@ -151,7 +161,6 @@ function handleTileClick(event) {
     selectPiece(row, col);
 }
 
-
 // Select and move pieces
 function selectPiece(row, col) {
     const piece = board[row][col];
@@ -171,19 +180,16 @@ function selectPiece(row, col) {
             if (move.merge) {
                 board[row][col] = move.merge;
                 board[selectedPosition.row][selectedPosition.col] = null;
-                checkWinByMergingOctagons(move.merge); // Check if merging octagons causes a win
+                checkWinByMergingOctagons(move.merge);
             } else if (move.eat) {
                 if (move.both) {
-                    // Both pieces are removed
                     board[row][col] = null;
                     board[selectedPosition.row][selectedPosition.col] = null;
                 } else {
-                    // Remove the target piece and move the selected piece
                     board[row][col] = selectedPiece;
                     board[selectedPosition.row][selectedPosition.col] = null;
                 }
             } else {
-                // Just move the selected piece
                 board[row][col] = selectedPiece;
                 board[selectedPosition.row][selectedPosition.col] = null;
             }
@@ -197,7 +203,21 @@ function selectPiece(row, col) {
             // Save current state for undo
             saveCurrentGameState();
 
-            checkLoseCondition(); // Check if any player has lost all octagons
+            // After every move, check if the current player is in check or checkmate
+            if (isCheckmate(currentPlayer)) {
+                displayCheckmateMessage(currentPlayer);
+            } 
+            // Check if the player is in Check
+            else if (isOctagonUnderAttack(currentPlayer)) {
+                displayCheckMessage(currentPlayer);
+            } 
+            // Clear the check-status if no check
+            else {
+                clearCheckStatus();
+            }
+
+            // Check if any player has lost all octagons
+            checkLoseCondition();
         }
 
         selectedPiece = null;
@@ -207,7 +227,13 @@ function selectPiece(row, col) {
         // Select a new piece and highlight its moves
         selectedPiece = piece;
         selectedPosition = { row, col };
-        highlightedMoves = selectedPiece.getValidMoves(row, col, board);
+
+        // If the player is in check, filter moves to only those that can save the octagon
+        if (isOctagonUnderAttack(currentPlayer)) {
+            highlightedMoves = getLegalMovesThatSaveOctagon(piece, row, col);
+        } else {
+            highlightedMoves = selectedPiece.getValidMoves(row, col, board);
+        }
     }
 
     renderBoard();
@@ -254,12 +280,25 @@ function makeAIMove() {
         // Save current state for undo
         saveCurrentGameState();
 
-        checkLoseCondition(); // Check if any player has lost all octagons
+        // After AI makes a move, check if the human player is in check or checkmate
+        const humanColor = aiColor === 'red' ? 'black' : 'red';
+
+        if (isCheckmate(humanColor)) {
+            displayCheckmateMessage(humanColor);
+        } else if (isOctagonUnderAttack(humanColor)) {
+            displayCheckMessage(humanColor);
+        } else {
+            clearCheckStatus();
+        }
+
+        // Check if any player has lost all octagons
+        checkLoseCondition();
 
         // Render the board after AI move
         renderBoard();
     } else {
-        alert('AI has no valid moves! You win!');
+        // AI has no valid moves, player wins
+        displayWinMessage('You');
         resetGame();
     }
 }
@@ -302,8 +341,11 @@ function undoLastMove() {
 
             // Update the current player display
             document.getElementById('current-player').textContent = `Current Player: ${currentPlayer.toUpperCase()}`;
+
+            // Clear any status message
+            clearCheckStatus();
         } else {
-            alert("Cannot undo any further!");
+            displayCannotUndoMessage();
         }
     } else {
         // In human vs human mode, undo the last move
@@ -339,16 +381,206 @@ function undoLastMove() {
 
             // Update the current player display
             document.getElementById('current-player').textContent = `Current Player: ${currentPlayer.toUpperCase()}`;
+
+            // Clear any status message
+            clearCheckStatus();
         } else {
-            alert("Cannot undo any further!");
+            displayCannotUndoMessage();
         }
     }
 }
 
-// Add an undo button functionality
-document.getElementById('undo-btn').addEventListener('click', undoLastMove);
+// Display Checkmate Message with Options
+function displayCheckmateMessage(playerColor) {
+    const checkStatusDiv = document.getElementById('check-status');
+    if (gameMode === 'human-vs-ai' && playerColor !== aiColor) {
+        // Human is checkmated
+        checkStatusDiv.textContent = `${playerColor.toUpperCase()} is in checkmate! AI wins!`;
+    } else if (gameMode === 'human-vs-human') {
+        checkStatusDiv.textContent = `${playerColor.toUpperCase()} is in checkmate!`;
+    } else {
+        // AI is checkmated
+        checkStatusDiv.textContent = `${playerColor.toUpperCase()} is in checkmate! You win!`;
+    }
 
-// Reset game
+    checkStatusDiv.classList.add('checkmate');
+    checkStatusDiv.classList.remove('check', 'win');
+
+    // Add Undo and Restart buttons
+    addEndGameOptions();
+}
+
+// Display Check Message
+function displayCheckMessage(playerColor) {
+    const checkStatusDiv = document.getElementById('check-status');
+    checkStatusDiv.textContent = `${playerColor.toUpperCase()} is in check!`;
+    checkStatusDiv.classList.add('check');
+    checkStatusDiv.classList.remove('checkmate', 'win');
+}
+
+// Display Win Message
+function displayWinMessage(winner) {
+    const checkStatusDiv = document.getElementById('check-status');
+    checkStatusDiv.textContent = `${winner} wins!`;
+    checkStatusDiv.classList.add('win');
+    checkStatusDiv.classList.remove('check', 'checkmate');
+    addEndGameOptions();
+}
+
+// Clear Check Status
+function clearCheckStatus() {
+    const checkStatusDiv = document.getElementById('check-status');
+    checkStatusDiv.textContent = '';
+    checkStatusDiv.classList.remove('check', 'checkmate', 'win');
+}
+
+// Add Undo and Restart Options after Checkmate or Win
+
+// Get Legal Moves That Save the Octagon (Only moves that resolve the check)
+function getLegalMovesThatSaveOctagon(piece, row, col) {
+    const allMoves = piece.getValidMoves(row, col, board);
+    const legalMoves = [];
+
+    allMoves.forEach(move => {
+        // Simulate the move
+        const simulatedBoard = deepCopyBoard(board);
+        applyMove(simulatedBoard, { from: { row, col }, to: move, moveDetails: move, piece });
+
+        // Check if after the move, the player's octagon is still under attack
+        if (!isOctagonUnderAttack(currentPlayer, simulatedBoard)) {
+            legalMoves.push(move);
+        }
+    });
+
+    return legalMoves;
+}
+
+// Function to display messages when unable to undo further
+function displayCannotUndoMessage() {
+    const checkStatusDiv = document.getElementById('check-status');
+    checkStatusDiv.textContent = "Cannot undo any further!";
+    checkStatusDiv.classList.add('check');
+    checkStatusDiv.classList.remove('checkmate', 'win');
+}
+
+// Function to clone the board for simulation
+function deepCopyBoard(board) {
+    return board.map(row => row.map(piece => {
+        if (piece) {
+            // Clone the piece
+            return clonePiece(piece);
+        }
+        return null;
+    }));
+}
+
+// Function to apply a move to a board (used for simulation)
+function applyMove(board, move) {
+    const { from, to, moveDetails, piece } = move;
+
+    if (moveDetails.merge) {
+        board[to.row][to.col] = moveDetails.merge;
+        board[from.row][from.col] = null;
+    } else if (moveDetails.eat) {
+        if (moveDetails.both) {
+            board[to.row][to.col] = null;
+            board[from.row][from.col] = null;
+        } else {
+            board[to.row][to.col] = piece;
+            board[from.row][from.col] = null;
+        }
+    } else {
+        board[to.row][to.col] = piece;
+        board[from.row][from.col] = null;
+    }
+}
+
+// Function to clone a piece
+function clonePiece(piece) {
+    // Use Object.create to preserve the prototype chain
+    const clonedPiece = Object.create(Object.getPrototypeOf(piece));
+    // Copy over the properties
+    Object.assign(clonedPiece, piece);
+    return clonedPiece;
+}
+
+// Find the position of a specific piece on the board
+function findPiecePosition(piece, boardToSearch = board) {
+    for (let row = 0; row < BOARD_SIZE; row++) {
+        for (let col = 0; col < BOARD_SIZE; col++) {
+            if (boardToSearch[row][col] === piece) {
+                return { row, col };
+            }
+        }
+    }
+    return null;
+}
+
+// Function to check if a player's octagon is under attack
+function isOctagonUnderAttack(playerColor, boardToCheck = board) {
+    // Find the player's remaining octagon
+    const octagon = boardToCheck.flat().find(piece => piece instanceof Octagon && piece.color === playerColor);
+
+    if (!octagon) return false; // No octagon means no check condition
+
+    // Get octagon position
+    const octagonPosition = findPiecePosition(octagon, boardToCheck);
+
+    if (!octagonPosition) return false; // Octagon not found on the board
+
+    // Get all opponent pieces
+    const opponentColor = playerColor === 'red' ? 'black' : 'red';
+    const opponentPieces = boardToCheck.flat().filter(piece => piece && piece.color === opponentColor);
+
+    // Check if any opponent piece can capture the octagon
+    for (const opponentPiece of opponentPieces) {
+        const opponentPosition = findPiecePosition(opponentPiece, boardToCheck);
+        if (!opponentPosition) continue;
+
+        const validMoves = opponentPiece.getValidMoves(opponentPosition.row, opponentPosition.col, boardToCheck);
+
+        // If any valid move can eat the octagon, it's a check
+        if (validMoves.some(move => move.eat && move.row === octagonPosition.row && move.col === octagonPosition.col)) {
+            return true;
+        }
+    }
+
+    return false; // No threats to the octagon
+}
+
+// Function to determine if a player is in checkmate
+function isCheckmate(playerColor) {
+    // First, check if the player is in check
+    if (!isOctagonUnderAttack(playerColor)) return false; // Not in check, so no checkmate
+
+    // Get the current player's pieces
+    const playerPieces = board.flat().filter(piece => piece && piece.color === playerColor);
+
+    // For each of the player's pieces, check if they have any valid moves
+    for (const piece of playerPieces) {
+        const piecePosition = findPiecePosition(piece);
+        if (!piecePosition) continue;
+
+        const validMoves = piece.getValidMoves(piecePosition.row, piecePosition.col, board);
+
+        // Simulate each move and check if it removes the check
+        for (const move of validMoves) {
+            const simulatedBoard = deepCopyBoard(board);
+
+            // Apply the move on the simulated board
+            applyMove(simulatedBoard, { from: piecePosition, to: move, moveDetails: move, piece });
+
+            // Check if the player is still in check after the move
+            if (!isOctagonUnderAttack(playerColor, simulatedBoard)) {
+                return false; // Found a move that can save the octagon, so not checkmate
+            }
+        }
+    }
+
+    return true; // No valid moves to prevent capture, checkmate!
+}
+
+// Function to reset the game
 function resetGame() {
     selectedPiece = null;
     selectedPosition = null;
@@ -357,19 +589,62 @@ function resetGame() {
     board = initializeBoard();
     gameStateHistory = []; // Clear the game state history
     moveHistory = [];      // Clear the move history
+    clearCheckStatus();    // Clear any status message and remove classes
     saveCurrentGameState(); // Save the initial state
     renderBoard();
 }
 
-// Add event listener for reset button
+
+// Function to add event listeners for buttons (if not using dynamic buttons)
+document.getElementById('undo-btn').addEventListener('click', undoLastMove);
 document.getElementById('reset-btn').addEventListener('click', resetGame);
 
-// Add event listener to select game mode
+// Function to add event listener to select game mode
 document.getElementById('mode-select').addEventListener('change', function(event) {
     gameMode = event.target.value;
     resetGame();
 });
 
-// Initial render and save the initial state
+// Function to display end-game options (Undo and Restart)
+function addEndGameOptions() {
+    const checkStatusDiv = document.getElementById('check-status');
+
+    // Check if buttons already exist to prevent duplicates
+    if (document.getElementById('end-game-options')) return;
+
+    // Create a container for buttons
+    const buttonContainer = document.createElement('div');
+    buttonContainer.id = 'end-game-options';
+    buttonContainer.classList.add('mt-2');
+
+    // Create Undo Button
+    const undoButton = document.createElement('button');
+    undoButton.textContent = 'Undo Last Move';
+    undoButton.classList.add('btn', 'btn-warning', 'btn-sm', 'mr-2');
+    undoButton.addEventListener('click', () => {
+        undoLastMove();
+        // Remove the buttons after undo
+        buttonContainer.remove();
+    });
+
+    // Create Restart Button
+    const restartButton = document.createElement('button');
+    restartButton.textContent = 'Restart Game';
+    restartButton.classList.add('btn', 'btn-danger', 'btn-sm');
+    restartButton.addEventListener('click', () => {
+        resetGame();
+        // Remove the buttons after restart
+        buttonContainer.remove();
+    });
+
+    // Append buttons to the container
+    buttonContainer.appendChild(undoButton);
+    buttonContainer.appendChild(restartButton);
+
+    // Append the container to the checkStatusDiv
+    checkStatusDiv.appendChild(buttonContainer);
+}
+
+// Initial setup: save the initial game state and render the board
 saveCurrentGameState();
 renderBoard();
