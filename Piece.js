@@ -19,7 +19,7 @@ export class Piece {
             case 'hexagon':
                 return '⬢';
             case 'octagon':
-                return '○';
+                return '۞';
             default:
                 return '';
         }
