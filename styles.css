@@ -1,238 +1,29 @@
-/* styles.css */
-
-/* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* General Styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
     text-align: center;
+    padding-bottom: 60px; /* Ensure footer is visible */
     background-image: url('bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    min-height: 100vh;
-    position: relative;
-    color: #fff; /* Default text color to stand out against the wood background */
-    overflow-x: hidden;
-}
 
-/* Overlay to darken the background for better readability */
-body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-    z-index: -1;
-}
-
-/* Header with Navigation Menu */
-header {
-    background-color: rgba(0, 0, 0, 0.7);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    padding: 10px 0;
-}
-
-.navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    flex-wrap: wrap;
 }
 
 .logo-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 120px; /* Increased height for better visibility */
-    margin-bottom: 20px;
+    padding: 20px 0;
 }
 
 .logo {
-    max-width: 250px; /* Adjusted size for prominence */
+    max-width: 150px; /* Adjusted for better mobile fit */
     height: auto;
 }
 
-.nav-menu {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.nav-item {
-    margin: 0 10px;
-    display: flex;
-    align-items: center;
-}
-
-.nav-select {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-}
-
-.btn {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: background-color 0.3s ease;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #fff;
-}
-
-.btn i {
-    margin-right: 5px;
-}
-
-.btn-reset {
-    background-color: #e74c3c;
-}
-
-.btn-reset:hover {
-    background-color: #c0392b;
-}
-
-.btn-undo {
-    background-color: #f39c12;
-}
-
-.btn-undo:hover {
-    background-color: #d35400;
-}
-
-.btn-link {
-    text-decoration: none;
-    color: #fff;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-}
-
-.btn-link:hover {
-    color: #3498db;
-    text-decoration: underline;
-}
-
-/* Toggle Switch */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-    margin-right: 10px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: 0.4s;
-    border-radius: 24px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: #66bb6a;
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-/* Player Areas */
-.player-area {
-    padding: 20px;
-    border-radius: 10px;
-    margin: 20px auto;
-    max-width: 480px;
-    background: rgba(0, 0, 0, 0.6);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-    position: relative;
-}
-
-.player-black {
-    background-color: rgba(44, 62, 80, 0.8); /* Darker for Black Player */
-}
-
-.player-red {
-    background-color: rgba(192, 57, 43, 0.8); /* Reddish for Red Player */
-}
-
-.player-area h2 {
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-    text-shadow: 2px 2px 4px #000;
-}
-
-.badge {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 16px;
-    border-radius: 20px;
-    background-color: #e74c3c;
-    color: #fff;
-    font-weight: bold;
-    font-size: 1.1rem;
-    text-shadow: 1px 1px 2px #000;
-}
-
-.status {
-    margin-top: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    transition: color 0.3s ease;
-    text-shadow: 1px 1px 2px #000;
-}
-
-/* Status Colors */
-.status.check {
-    color: orange;
-}
-
-.status.checkmate {
-    color: darkred;
-}
-
-.status.win {
-    color: #2ecc71;
-}
-
-/* Game Board Styling */
+/* Game Board Styles - Kept as is */
 #game-board {
     display: flex;
     flex-wrap: wrap;
@@ -240,140 +31,270 @@ input:checked + .slider:before {
     margin: 20px auto;
 }
 
-/* Tile Styling */
 .tile {
     width: 60px;
     height: 60px;
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease, border 0.3s ease;
 }
 
 .tile.light {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: #eee;
 }
 
 .tile.dark {
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #cccccc59;
 }
 
-.tile:hover {
-    transform: scale(1.05);
+.piece {
+    font-size: 40px;
+    line-height: 60px;
 }
 
+.piece-red {
+    color: red;
+}
+
+.piece-black {
+    color: black;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 540px) {
+    #game-board {
+        width: 330px; /* Make the game board responsive */
+        max-width: 484px;
+    }
+
+    .tile {
+        width: 10vw;
+        height: 10vw;
+    }
+
+    .piece {
+        font-size: 6vw;
+        line-height: 10vw;
+    }
+
+    .logo {
+        max-width: 120px;
+    }
+}
+
+@media (min-width: 541px) and (max-width: 768px) {
+    #game-board {
+        width: 80vw;
+    }
+
+    .tile {
+        width: 8.3333vw; /* 100/12 ≈ 8.3333 */
+        height: 8.3333vw;
+    }
+
+    .piece {
+        font-size: 6vw;
+        line-height: 8.3333vw;
+    }
+
+    .logo {
+        max-width: 150px;
+    }
+}
+
+/* Current Player and Status */
+#current-player {
+    font-size: 1.2rem;
+    padding: 10px 15px;
+}
+
+#check-status {
+    font-size: 1.2rem;
+    font-weight: bold;
+    height: auto;
+    margin-top: 10px;
+    transition: color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#check-status.check {
+    color: orange;
+}
+
+#check-status.checkmate {
+    color: rgb(255, 255, 255);
+}
+
+#check-status.win {
+    color: green;
+}
+
+/* Action Section */
+.action-section {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.action-section .row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-block {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1rem;
+}
+
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 8px 0;
+}
+
+a.btn-link {
+    text-align: center;
+    font-size: 1rem;
+}
+
+a.btn-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Footer */
+footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background-color: #ffffff;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+
+/* Highlighted Tiles */
+.tile.selected {
+    border: 0.5px solid rgb(0, 255, 191);
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+/* Additional Enhancements */
+.form-group label {
+    font-weight: bold;
+}
+
+.form-check-label {
+    font-size: 1rem;
+}
+
+
+/* Existing Styles (unchanged) */
+.tile .piece {
+    cursor: pointer;
+}
+
+/* Change cursor to pointer when hovering over highlighted tiles */
+.tile.selected {
+    cursor: pointer;
+}
+
+/* Highlighted tiles with animation */
 .tile.selected {
     border: 2px solid rgb(0, 255, 191);
     box-sizing: border-box;
     animation: pulse 1s infinite;
 }
 
-/* Pulse Animation for Selected Tiles */
+/* Pulse Animation Keyframes */
 @keyframes pulse {
     0% {
-        box-shadow: 0 0 5px rgb(0, 255, 191);
+        box-shadow: 0 0 10px rgba(0, 255, 191, 0.5);
     }
     50% {
-        box-shadow: 0 0 20px rgb(0, 255, 191);
+        box-shadow: 0 0 20px rgba(0, 255, 191, 1);
     }
     100% {
-        box-shadow: 0 0 5px rgb(0, 255, 191);
+        box-shadow: 0 0 10px rgba(0, 255, 191, 0.5);
     }
 }
 
-/* Piece Styling */
-.piece {
-    font-size: 40px;
-    line-height: 60px;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.2s ease;
-}
-
+/* Optional: Hover Effect for Pieces */
 .piece:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
+    transition: transform 0.2s;
 }
 
-.piece-red {
-    color: red;
-    text-shadow: 2px 2px 4px #000;
-}
-
-.piece-black {
-    color: black;
-    text-shadow: 2px 2px 4px #fff;
-}
-
-/* Footer Styling */
-footer {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    color: #fff;
-    text-shadow: 1px 1px 2px #000;
-    font-size: 0.9rem;
-}
-
-/* Prevent Responsive Scaling of Game Board */
-@media (max-width: 1200px) {
+/* Responsive Enhancements (from previous response) */
+@media (max-width: 540px) {
     #game-board {
-        width: 480px;
-        height: 480px;
-    }
-}
-
-@media (max-width: 768px) {
-    #game-board {
-        width: 480px;
-        height: 480px;
-    }
-
-    .logo {
-        max-width: 250px;
-    }
-
-    .player-area {
-        max-width: 480px;
-    }
-}
-
-@media (max-width: 576px) {
-    #game-board {
-        width: 480px;
-        height: 480px;
-    }
-
-    .logo {
-        max-width: 250px;
-    }
-
-    .player-area {
+        width: 330px; /* Make the game board responsive */
         max-width: 480px;
     }
 
     .tile {
-        width: 60px;
-        height: 60px;
+        width: 10vw;
+        height: 10vw;
     }
 
     .piece {
-        font-size: 40px;
-        line-height: 60px;
+        font-size: 6vw;
+        line-height: 10vw;
     }
 
-    .navbar {
-        flex-direction: column;
-        align-items: flex-start;
+    .logo {
+        max-width: 120px;
+    }
+}
+
+@media (min-width: 541px) and (max-width: 768px) {
+    #game-board {
+        width: 80vw;
     }
 
-    .nav-menu {
-        flex-direction: column;
-        width: 100%;
+    .tile {
+        width: 8.3333vw; /* 100/12 ≈ 8.3333 */
+        height: 8.3333vw;
     }
 
-    .nav-item {
-        margin: 5px 0;
+    .piece {
+        font-size: 6vw;
+        line-height: 8.3333vw;
     }
+
+    .logo {
+        max-width: 150px;
+    }
+}
+
+/* Additional Enhancements */
+.form-group label {
+    font-weight: bold;
+}
+
+.form-check-label {
+    font-size: 1rem;
+}
+
+/* Footer */
+footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background-color: #ffffff;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+
+/* Selected Tile Styling (Ensured Consistency) */
+.tile.selected {
+    border: 2px solid rgb(0, 255, 191);
+    box-sizing: border-box;
+    animation: pulse 1s infinite;
+}
+
+/* Ensuring Pieces are Clickable */
+.piece {
+    cursor: pointer;
 }
