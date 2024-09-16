@@ -1,25 +1,24 @@
-/* General Styles */
+.tile .piece {
+    cursor: pointer;
+}
+
+/* Change cursor to pointer when hovering over highlighted tiles */
+.tile.selected {
+    cursor: pointer;
+}
+
+/* Highlighted tiles */
+.tile.selected {
+    border: 0.5px solid rgb(0, 255, 191);
+    box-sizing: border-box;
+}
+
+/* Existing styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
     text-align: center;
-    padding-bottom: 60px; /* Ensure footer is visible */
-
 }
 
-.logo-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 0;
-}
-
-.logo {
-    max-width: 150px; /* Adjusted for better mobile fit */
-    height: auto;
-}
-
-/* Game Board Styles - Kept as is */
 #game-board {
     display: flex;
     flex-wrap: wrap;
@@ -38,7 +37,7 @@ body {
 }
 
 .tile.dark {
-    background-color: #8d8d8d;
+    background-color: #ccc;
 }
 
 .piece {
@@ -53,59 +52,56 @@ body {
 .piece-black {
     color: black;
 }
-
-/* Responsive Adjustments */
-@media (max-width: 540px) {
-    #game-board {
-        width: 330px; /* Make the game board responsive */
-        max-width: 484px;
-    }
-
-    .tile {
-        width: 10vw;
-        height: 10vw;
-    }
-
-    .piece {
-        font-size: 6vw;
-        line-height: 10vw;
-    }
-
-    .logo {
-        max-width: 120px;
-    }
+.action-section {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
-@media (min-width: 541px) and (max-width: 768px) {
-    #game-board {
-        width: 80vw;
-    }
-
-    .tile {
-        width: 8.3333vw; /* 100/12 ≈ 8.3333 */
-        height: 8.3333vw;
-    }
-
-    .piece {
-        font-size: 6vw;
-        line-height: 8.3333vw;
-    }
-
-    .logo {
-        max-width: 150px;
-    }
+.row {
+    display: flex;
+    justify-content: space-between;
 }
 
-/* Current Player and Status */
-#current-player {
-    font-size: 1.2rem;
-    padding: 10px 15px;
+.btn-block {
+    width: 100%;
+    padding: 8px 15px;
+    font-size: 0.9rem;
 }
 
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+}
+
+a.btn-link {
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+a.btn-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+/* Center logo at the top */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* Adjust the height to fit the smaller logo */
+    margin-bottom: 20px; /* Space between the logo and content */
+    margin-top: 20px
+}
+
+.logo {
+    max-width: 200px; /* Set the logo to a smaller size */
+    margin-top: 20px
+
+}
 #check-status {
-    font-size: 1.2rem;
+    font-size: 1.2em;
     font-weight: bold;
-    height: auto;
+    height: 50px; /* Increased height to accommodate buttons */
     margin-top: 10px;
     transition: color 0.3s ease;
     display: flex;
@@ -114,82 +110,24 @@ body {
     justify-content: center;
 }
 
+/* Different colors for different statuses */
 #check-status.check {
     color: orange;
 }
 
 #check-status.checkmate {
-    color: rgb(255, 255, 255);
+    color: darkred;
 }
 
 #check-status.win {
     color: green;
 }
 
-/* Action Section */
-.action-section {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+/* Style for end-game buttons */
+#end-game-options button {
+    margin: 5px;
 }
 
-.action-section .row {
-    display: flex;
-    justify-content: space-between;
-}
-
-.btn-block {
-    width: 100%;
-    padding: 10px 0;
-    font-size: 1rem;
-}
-
-.btn-sm {
-    font-size: 0.85rem;
-    padding: 8px 0;
-}
-
-a.btn-link {
-    text-align: center;
-    font-size: 1rem;
-}
-
-a.btn-link:hover {
-    color: #0056b3;
-    text-decoration: underline;
-}
-
-/* Footer */
-footer {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    background-color: #ffffff;
-    padding: 10px 0;
-    border-top: 1px solid #ddd;
-}
-
-/* Highlighted Tiles */
-.tile.selected {
-    border: 0.5px solid rgb(0, 255, 191);
-    box-sizing: border-box;
-    cursor: pointer;
-}
-
-/* Additional Enhancements */
-.form-group label {
-    font-weight: bold;
-}
-
-.form-check-label {
-    font-size: 1rem;
-}
-
-
-/* Existing Styles (unchanged) */
-.tile .piece {
-    cursor: pointer;
-}
 
 /* Change cursor to pointer when hovering over highlighted tiles */
 .tile.selected {
@@ -222,49 +160,6 @@ footer {
     transition: transform 0.2s;
 }
 
-/* Responsive Enhancements (from previous response) */
-@media (max-width: 540px) {
-    #game-board {
-        width: 330px; /* Make the game board responsive */
-        max-width: 480px;
-    }
-
-    .tile {
-        width: 10vw;
-        height: 10vw;
-    }
-
-    .piece {
-        font-size: 6vw;
-        line-height: 10vw;
-    }
-
-    .logo {
-        max-width: 120px;
-    }
-}
-
-@media (min-width: 541px) and (max-width: 768px) {
-    #game-board {
-        width: 80vw;
-    }
-
-    .tile {
-        width: 8.3333vw; /* 100/12 ≈ 8.3333 */
-        height: 8.3333vw;
-    }
-
-    .piece {
-        font-size: 6vw;
-        line-height: 8.3333vw;
-    }
-
-    .logo {
-        max-width: 150px;
-    }
-}
-
-/* Additional Enhancements */
 .form-group label {
     font-weight: bold;
 }
